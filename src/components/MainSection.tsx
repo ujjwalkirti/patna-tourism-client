@@ -6,8 +6,10 @@ import {
   patch_endpoints,
   post_endpoints,
 } from "./data";
+import EndPoint from "./Endpoint";
+
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const MainSection = () => {
   const question = "font-bold text-3xl text-yellow-300 mb-4";
@@ -60,31 +62,47 @@ const MainSection = () => {
           We have a set of predefined endpoints which you can send requests to.
         </p>
         <p className={answer}>They are listed as follows:</p>
-        <section className="w-11/12 mx-auto mt-5">
+        <div className="mt-5 w-10/12 mx-auto">
+          <p className="mb-4">
+            <span className="text-yellow-600 font-semibold">Note :</span> You
+            will only be able to access the endpoints if you are attaching your
+            API key in your headers, like this:
+          </p>
+          <pre className="whitespace-pre-wrap bg-gray-800 border border-gray-700 rounded-md p-4 text-sm font-mono text-gray-200">
+            <SyntaxHighlighter
+              showLineNumbers
+              language="typescript"
+              style={dracula}
+            >
+              {`
+                  Header:
+                  Key: X-API-Key
+                  Value: YOUR_API_KEY
+
+                  Here's an example Fetch request:
+
+                  fetch('https://api.example.com/your-endpoint', {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'X-API-Key': 'YOUR_API_KEY'
+                    }
+                  })
+          `}
+            </SyntaxHighlighter>
+          </pre>
+        </div>
+        <p className="mt-5">Also remember,</p>
+        <p className="text-center my-5 bg-gray-800 w-4/5 mx-auto rounded-md py-4">
+          <span className="text-yellow-600 font-bold ">BASE_URL</span> = "https://patna-tourism-api.azurewebsites.net/"
+        </p>
+        <section className="w-11/12 mx-auto mt-5 flex flex-col gap-y-5">
           {/* get endpoints description */}
           <div>
             <p className="text-green-600 font-bold text-3xl">GET</p>
             <ol className="list-decimal space-y-4">
               {get_endpoints.map((endpoint, index) => (
-                <li
-                  className="list-item space-y-3 bg-gray-900 my-2 px-3 py-2 rounded-md"
-                  key={index}
-                >
-                  <p className="bg-inherit">
-                    <strong>Route</strong>: {"<BASE_URL>"}
-                    {endpoint.route}
-                  </p>
-                  <p className="bg-inherit">{endpoint.desc}</p>
-                  <pre className="whitespace-pre-wrap bg-gray-800 border border-gray-700 rounded-md p-4 text-sm font-mono text-gray-200">
-                    <SyntaxHighlighter language="typescript" style={atomDark}>
-                      {endpoint.code_sample}
-                    </SyntaxHighlighter>
-                  </pre>
-
-                  <button className="bg-yellow-600 hover:bg-white border border-yellow-600 hover:text-yellow-600 px-2 py-1 font-semibold rounded-md w-24 mx-auto">
-                    Test it!
-                  </button>
-                </li>
+                <EndPoint endpoint={endpoint} key={index} />
               ))}
             </ol>
           </div>
@@ -93,24 +111,7 @@ const MainSection = () => {
             <p className="text-yellow-600 font-bold text-3xl">POST</p>
             <ol className="list-decimal space-y-4">
               {post_endpoints.map((endpoint, index) => (
-                <li
-                  className="list-item space-y-3 bg-gray-900 my-2 px-3 py-2 rounded-md"
-                  key={index}
-                >
-                  <p className="bg-inherit">
-                    <strong>Route</strong>: {"<BASE_URL>"}
-                    {endpoint.route}
-                  </p>
-                  <p className="bg-inherit">{endpoint.desc}</p>
-                  <pre className="whitespace-pre-wrap bg-gray-800 border border-gray-700 rounded-md p-4 text-sm font-mono text-gray-200">
-                    <SyntaxHighlighter language="typescript" style={atomDark}>
-                      {endpoint.code_sample}
-                    </SyntaxHighlighter>
-                  </pre>
-                  <button className="bg-yellow-600 hover:bg-white border border-yellow-600 hover:text-yellow-600 px-2 py-1 font-semibold rounded-md w-24 mx-auto">
-                    Test it!
-                  </button>
-                </li>
+                <EndPoint endpoint={endpoint} key={index} />
               ))}
             </ol>
           </div>
@@ -119,24 +120,7 @@ const MainSection = () => {
             <p className="text-orange-600 font-bold text-3xl">PATCH</p>
             <ol className="list-decimal space-y-4">
               {patch_endpoints.map((endpoint, index) => (
-                <li
-                  className="list-item space-y-3 bg-gray-900 my-2 px-3 py-2 rounded-md"
-                  key={index}
-                >
-                  <p className="bg-inherit">
-                    <strong>Route</strong>: {"<BASE_URL>"}
-                    {endpoint.route}
-                  </p>
-                  <p className="bg-inherit">{endpoint.desc}</p>
-                  <pre className="whitespace-pre-wrap bg-gray-800 border border-gray-700 rounded-md p-4 text-sm font-mono text-gray-200">
-                    <SyntaxHighlighter language="typescript" style={atomDark}>
-                      {endpoint.code_sample}
-                    </SyntaxHighlighter>
-                  </pre>
-                  <button className="bg-yellow-600 hover:bg-white border border-yellow-600 hover:text-yellow-600 px-2 py-1 font-semibold rounded-md w-24 mx-auto">
-                    Test it!
-                  </button>
-                </li>
+                <EndPoint endpoint={endpoint} key={index} />
               ))}
             </ol>
           </div>
@@ -145,24 +129,7 @@ const MainSection = () => {
             <p className="text-red-600 font-bold text-3xl">DELETE</p>
             <ol className="list-decimal space-y-4">
               {delete_endpoints.map((endpoint, index) => (
-                <li
-                  className="list-item space-y-3 bg-gray-900 my-2 px-3 py-2 rounded-md"
-                  key={index}
-                >
-                  <p className="bg-inherit">
-                    <strong>Route</strong>: {"<BASE_URL>"}
-                    {endpoint.route}
-                  </p>
-                  <p className="bg-inherit">{endpoint.desc}</p>
-                  <pre className="whitespace-pre-wrap bg-gray-800 border border-gray-700 rounded-md p-4 text-sm font-mono text-gray-200">
-                    <SyntaxHighlighter language="typescript" style={atomDark}>
-                      {endpoint.code_sample}
-                    </SyntaxHighlighter>
-                  </pre>
-                  <button className="bg-yellow-600 hover:bg-white border border-yellow-600 hover:text-yellow-600 px-2 py-1 font-semibold rounded-md w-24 mx-auto">
-                    Test it!
-                  </button>
-                </li>
+                <EndPoint endpoint={endpoint} key={index} />
               ))}
             </ol>
           </div>
