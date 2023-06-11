@@ -94,7 +94,8 @@ const MainSection = () => {
         </div>
         <p className="mt-5">Also remember,</p>
         <p className="text-center my-5 bg-gray-800 w-4/5 mx-auto rounded-md py-4">
-          <span className="text-yellow-600 font-bold ">BASE_URL</span> = "https://patna-tourism-api.azurewebsites.net/"
+          <span className="text-yellow-600 font-bold ">BASE_URL</span> =
+          "https://patna-tourism-api.azurewebsites.net/"
         </p>
         <section className="w-11/12 mx-auto mt-5 flex flex-col gap-y-5">
           {/* get endpoints description */}
@@ -102,7 +103,7 @@ const MainSection = () => {
             <p className="text-green-600 font-bold text-3xl">GET</p>
             <ol className="list-decimal space-y-4">
               {get_endpoints.map((endpoint, index) => (
-                <EndPoint endpoint={endpoint} key={index} />
+                <EndPoint endpoint={endpoint} key={index} typeOfRequest="GET" />
               ))}
             </ol>
           </div>
@@ -111,7 +112,11 @@ const MainSection = () => {
             <p className="text-yellow-600 font-bold text-3xl">POST</p>
             <ol className="list-decimal space-y-4">
               {post_endpoints.map((endpoint, index) => (
-                <EndPoint endpoint={endpoint} key={index} />
+                <EndPoint
+                  endpoint={endpoint}
+                  key={index}
+                  typeOfRequest="POST"
+                />
               ))}
             </ol>
           </div>
@@ -120,7 +125,11 @@ const MainSection = () => {
             <p className="text-orange-600 font-bold text-3xl">PATCH</p>
             <ol className="list-decimal space-y-4">
               {patch_endpoints.map((endpoint, index) => (
-                <EndPoint endpoint={endpoint} key={index} />
+                <EndPoint
+                  endpoint={endpoint}
+                  key={index}
+                  typeOfRequest="PATCH"
+                />
               ))}
             </ol>
           </div>
@@ -129,7 +138,11 @@ const MainSection = () => {
             <p className="text-red-600 font-bold text-3xl">DELETE</p>
             <ol className="list-decimal space-y-4">
               {delete_endpoints.map((endpoint, index) => (
-                <EndPoint endpoint={endpoint} key={index} />
+                <EndPoint
+                  endpoint={endpoint}
+                  key={index}
+                  typeOfRequest="DELETE"
+                />
               ))}
             </ol>
           </div>

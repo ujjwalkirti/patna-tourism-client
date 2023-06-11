@@ -9,9 +9,10 @@ type Endpoint = {
 };
 type props = {
   endpoint: Endpoint;
+  typeOfRequest: string;
 };
 
-const EndPoint = ({ endpoint }: props) => {
+const EndPoint = ({ endpoint, typeOfRequest }: props) => {
   return (
     <li className="list-item space-y-3 bg-gray-900 my-2 px-3 py-2 rounded-md">
       <p className="bg-inherit">
@@ -25,11 +26,27 @@ const EndPoint = ({ endpoint }: props) => {
         </SyntaxHighlighter>
       </pre>
 
-      <button className="bg-yellow-600 hover:bg-white border border-yellow-600 hover:text-yellow-600 px-2 py-1 font-semibold rounded-md w-24 mx-auto">
+      {/* <button
+        onClick={() => submitRequest(endpoint.route, typeOfRequest)}
+        className="bg-yellow-600 hover:bg-white border border-yellow-600 hover:text-yellow-600 px-2 py-1 font-semibold rounded-md w-24 mx-auto"
+      >
         Test it!
-      </button>
+      </button> */}
     </li>
   );
 };
 
 export default EndPoint;
+
+const submitRequest = async (endpoint: string, method: string) => {
+  const res = await fetch(
+    `https://patna-tourism-api.azurewebsites.net/${endpoint}`,
+    {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": process.env.API_KEY || "",
+      },
+    }
+  );
+};
