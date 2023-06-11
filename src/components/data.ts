@@ -91,13 +91,11 @@ const post_endpoints = [
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': 'Your API Key'
           // Add any additional headers as needed
         },
         body: JSON.stringify({
-          // Include the necessary data for creating a new venue type
           name: 'Type Name',
-          description: 'Type Description',
-          // Add any other required fields
         }),
       })
         .then(response => {
@@ -123,13 +121,19 @@ const post_endpoints = [
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': 'Your API Key'
           // Add any additional headers as needed
         },
         body: JSON.stringify({
           // Include the necessary data for creating a new venue
-          name: 'Venue Name',
-          address: 'Venue Address',
-          // Add any other required fields
+          type: 'Venue type',
+          name: 'Venue name',
+          description: 'Venue description',
+          rating: 'Venue rating, provide on a scale of 10',
+          lat: 'Venue latitude',
+          long: 'Venue Longitude',
+          img: 'Venue image url',
+          website: 'Venue website'
         }),
       })
         .then(response => {
@@ -155,12 +159,13 @@ const post_endpoints = [
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': 'Your API Key'
           // Add any additional headers as needed
         },
         body: JSON.stringify({
           // Include the necessary data for creating a new review
-          venueId: 'Venue ID',
-          rating: 4,
+          venue: 'Venue ID',
+          author: 'Review author',
           comment: 'Review comment',
           // Add any other required fields
         }),
@@ -182,7 +187,6 @@ const post_endpoints = [
   },
 ];
 
-
 const patch_endpoints = [
   {
     route: "/venues/:id",
@@ -194,12 +198,11 @@ const patch_endpoints = [
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': 'Your API Key'
           // Add any additional headers as needed
         },
         body: JSON.stringify({
           // Include the updated data for the venue
-          name: 'Updated Venue Name',
-          address: 'Updated Venue Address',
           // Add any other fields you want to update
         }),
       })
@@ -228,12 +231,11 @@ const patch_endpoints = [
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': 'Your API Key'
           // Add any additional headers as needed
         },
         body: JSON.stringify({
           // Include the updated data for the review
-          rating: 5,
-          comment: 'Updated review comment',
           // Add any other fields you want to update
         }),
       })
@@ -263,7 +265,11 @@ const delete_endpoints = [
       
       fetch(\`/venues/\${venueId}\`, {
         method: 'DELETE',
-        // Add any necessary headers
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': 'Your API Key'
+          // Add any additional headers as needed
+        }
       })
         .then(response => {
           // Handle the response
@@ -288,7 +294,11 @@ const delete_endpoints = [
       
       fetch(\`/reviews/\${reviewId}\`, {
         method: 'DELETE',
-        // Add any necessary headers
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': 'Your API Key'
+          // Add any additional headers as needed
+        }
       })
         .then(response => {
           // Handle the response
