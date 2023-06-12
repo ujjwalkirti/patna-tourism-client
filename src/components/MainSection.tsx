@@ -152,13 +152,20 @@ const MainSection = () => {
                       uid: user.uid,
                       name: user.displayName,
                     };
-                    fetch(`${process.env.REACT_APP_BASE_URL_DEV}/get-api-key`, {
-                      method: "POST",
-                      headers: {
-                        "Content-type": "application/json; charset=UTF-8",
-                      },
-                      body: JSON.stringify(body),
-                    })
+                    fetch(
+                      `${
+                        process.env.NODE_ENV === "production"
+                          ? process.env.REACT_APP_BASE_URL_PROD
+                          : process.env.REACT_APP_BASE_URL_DEV
+                      }/get-api-key`,
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-type": "application/json; charset=UTF-8",
+                        },
+                        body: JSON.stringify(body),
+                      }
+                    )
                       .then((res) => res.json())
                       .then((data) => {
                         setApiKey(data.existingApiKey.key);
