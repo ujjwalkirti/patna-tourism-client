@@ -1,0 +1,18 @@
+.parent{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    gap: 20px;
+}
+
+.parent p{
+    text-align: center;
+}
+
+
+.socials-container a:hover{
+    color:rgb(234,179,8);
+    cursor: pointer;
+
+}
