@@ -16,10 +16,12 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { toast } from "react-toastify";
+import { HourglassSplit } from "react-bootstrap-icons";
 
 const MainSection = () => {
   const [user, setUser] = useState<any>({});
   const [apiKey, setApiKey] = useState<string>("");
+  const [apiKeyFetchStatus, setApiKeyFetchStatus] = useState(false);
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -147,6 +149,7 @@ const MainSection = () => {
                         toast.error(error.message);
                       });
                   } else {
+                    setApiKeyFetchStatus(true);
                     const body = {
                       email: user.email,
                       uid: user.uid,
@@ -169,19 +172,27 @@ const MainSection = () => {
                       .then((res) => res.json())
                       .then((data) => {
                         setApiKey(data.existingApiKey.key);
+                        setApiKeyFetchStatus(false);
                       })
                       .catch((error) => {
                         toast.error(
                           "Sorry, something went wrong. Please try again."
                         );
+                        setApiKeyFetchStatus(false);
                       });
                   }
                 }}
-                className="bg-yellow-600 px-2 py-1 rounded-md"
+                className="bg-yellow-600 border border-yellow-600 hover:text-yellow-600 hover:bg-inherit px-2 py-1 rounded-md"
               >
-                {Object.keys(user).length !== 0
-                  ? "Generate API Key"
-                  : "Sign In"}
+                {Object.keys(user).length !== 0 ? (
+                  apiKeyFetchStatus ? (
+                    <HourglassSplit />
+                  ) : (
+                    "Generate API Key"
+                  )
+                ) : (
+                  "Sign In"
+                )}
               </button>
             </>
           )}

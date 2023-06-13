@@ -7,8 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   useEffect(() => {
-    console.log(window.innerHeight);
-    console.log(window.innerWidth);
+    document.title = "Patna Tourism API 1.0";
   }, []);
   return (
     <div className="App">
