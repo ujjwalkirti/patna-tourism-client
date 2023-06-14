@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./MainSection.css";
 import {
   delete_endpoints,
@@ -14,26 +14,36 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
+  signOut,
 } from "firebase/auth";
 import { toast } from "react-toastify";
 import { HourglassSplit } from "react-bootstrap-icons";
+import axios from "axios";
 
 const MainSection = () => {
   const [user, setUser] = useState<any>({});
   const [apiKey, setApiKey] = useState<string>("");
   const [apiKeyFetchStatus, setApiKeyFetchStatus] = useState(false);
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      setUser(user);
-      // ...
-    } else {
-      // User is signed out
-      // ...
-    }
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        setUser(user);
+        // ...
+      } else {
+        // User is signed out
+        // ...
+        setUser({});
+        setApiKey("");
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
   });
+
   const question = "font-bold text-3xl text-yellow-300 mb-4";
   const answer = "text-xl ";
 
@@ -122,7 +132,7 @@ const MainSection = () => {
           ) : (
             <>
               <p className="text-left px-2 mt-5 mx-auto rounded-md py-4">
-                If you don't have one,
+                If you don't have one,{" "}
                 {Object.keys(user).length === 0
                   ? "You will need to sign in and then generate one."
                   : "Click here to generate!"}
@@ -132,53 +142,55 @@ const MainSection = () => {
                   const provider = new GoogleAuthProvider();
                   if (Object.keys(user).length === 0) {
                     signInWithPopup(auth, provider)
-                      .then((result) => {
-                        fetch("/add-email", {
-                          body: JSON.stringify({
-                            googleId: result.user.uid,
-                            name: result.user.displayName,
-                            email: result.user.email,
-                          }),
-                        });
-                        toast.success(
-                          "Successfully signed in with email " +
-                            result.user.email
-                        );
+                      .then(async (result) => {
+                        axios
+                          .post(
+                            `${
+                              process.env.NODE_ENV === "production"
+                                ? process.env.REACT_APP_BASE_URL_PROD
+                                : process.env.REACT_APP_BASE_URL_DEV
+                            }/add-email`,
+                            {
+                              googleId: result.user.uid,
+                              name: result.user.displayName,
+                              email: result.user.email,
+                            }
+                          )
+                          .then((response) => {
+                            toast.success(
+                              "Successfully signed in with email " +
+                                result.user.email
+                            );
+                          })
+                          .catch((error) => toast.error(error.message));
                       })
                       .catch((error) => {
                         toast.error(error.message);
                       });
                   } else {
-                    setApiKeyFetchStatus(true);
-                    const body = {
-                      email: user.email,
-                      uid: user.uid,
-                      name: user.displayName,
-                    };
-                    fetch(
-                      `${
-                        process.env.NODE_ENV === "production"
-                          ? process.env.REACT_APP_BASE_URL_PROD
-                          : process.env.REACT_APP_BASE_URL_DEV
-                      }/get-api-key`,
-                      {
-                        method: "POST",
-                        headers: {
-                          "Content-type": "application/json; charset=UTF-8",
-                        },
-                        body: JSON.stringify(body),
-                      }
-                    )
-                      .then((res) => res.json())
-                      .then((data) => {
-                        setApiKey(data.existingApiKey.key);
-                        setApiKeyFetchStatus(false);
+                    axios
+                      .post(
+                        `${
+                          process.env.NODE_ENV === "production"
+                            ? process.env.REACT_APP_BASE_URL_PROD
+                            : process.env.REACT_APP_BASE_URL_DEV
+                        }/get-api-key`,
+                        {
+                          email: user.email,
+                          uid: user.uid,
+                          name: user.displayName,
+                        }
+                      )
+                      .then(function (response) {
+                        toast.success(response.data.message);
+                        if (response.status === 200) {
+                          setApiKey(response.data.existingApiKey.key);
+                        } else {
+                          setApiKey(response.data.savedApiKey.key);
+                        }
                       })
-                      .catch((error) => {
-                        toast.error(
-                          "Sorry, something went wrong. Please try again."
-                        );
-                        setApiKeyFetchStatus(false);
+                      .catch(function (error) {
+                        toast.error(error.message);
                       });
                   }
                 }}
@@ -197,6 +209,22 @@ const MainSection = () => {
             </>
           )}
         </div>
+        {Object.keys(user).length !== 0 && (
+          <button
+            className="bg-yellow-600 border border-yellow-600 hover:text-yellow-600 hover:bg-inherit px-2 py-1 rounded-md mx-auto"
+            onClick={() => {
+              signOut(auth)
+                .then(() => {
+                  // Sign-out successful.
+                })
+                .catch((error) => {
+                  // An error happened.
+                });
+            }}
+          >
+            Sign out
+          </button>
+        )}
         <p className="mt-5">Also remember,</p>
         <p className="text-center my-5 bg-gray-800 w-4/5 mx-auto rounded-md py-4">
           <span className="text-yellow-600 font-bold ">BASE_URL</span> =
