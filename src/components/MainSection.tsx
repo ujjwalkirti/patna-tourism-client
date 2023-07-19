@@ -48,7 +48,7 @@ const MainSection = () => {
   const answer = "text-xl ";
 
   return (
-    <div className="w-4/5 mx-auto">
+    <div className="w-full px-2 lg:w-4/5 mx-auto">
       <div className="my-4">
         <p className={question}>What is this?</p>
         <p className={answer}>

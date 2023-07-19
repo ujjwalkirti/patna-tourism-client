@@ -11,7 +11,7 @@ function App() {
   }, []);
   return (
     <div className="App">
-      <p className="text-center text-5xl font-bold">
+      <p className="text-center text-3xl  lg:text-5xl font-bold">
         <span className="text-yellow-300">P</span>atna{" "}
         <span className="text-yellow-300">T</span>ourism{" "}
         <span className="text-yellow-300">API</span> 1.0
